@@ -23,6 +23,7 @@ defmodule TimeTrackerWeb.Router do
   scope "/api", TimeTrackerWeb do
     pipe_through :api
 
-    post "/simpleinout_hook", SimpleInOutController, :hook
+    post "/simpleinout/hook", SimpleInOutController, :hook
+    post "/simpleinout/oauth/token", SimpleInOutController, :token
   end
 end
