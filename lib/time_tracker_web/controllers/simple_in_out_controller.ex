@@ -11,30 +11,61 @@ defmodule TimeTrackerWeb.SimpleInOutController do
     # fetch keys from config
     config = Application.get_env(:time_tracker, __MODULE__)
     client_id = Keyword.get(config, :client_id)
-    secret = Keyword.get(config, :client_id)
+    secret = Keyword.get(config, :secret)
 
     # construct the URL
     url = make_url("/oauth/token")
 
+    # body =
+    #   make_body(%{
+    #     "grant_type" => "authorization_code",
+    #     "client_id" => client_id,
+    #     "client_secret" => secret,
+    #     "code" => params["code"],
+    #     "redirect_uri" => URI.encode("https://time.adrianaleixandre.com")
+    #   })
     body =
-      make_body(%{
-        "grant_type" => "authorization_code",
-        "client_id" => client_id,
-        "client_secret" => secret,
-        "code" => params["code"],
-        "redirect_uri" => URI.encode("https://time.adrianaleixandre.com")
-      })
-
-    IO.inspect(body)
+      {:form,
+       [
+         grant_type: "authorization_code",
+         client_id: client_id,
+         client_secret: secret,
+         code: params["code"],
+         redirect_uri: "https://time.adrianaleixandre.com"
+       ]}
 
     response = HTTPoison.post(url, body)
+    handle_token_response(conn, response)
+  end
 
-    IO.inspect(response)
+  @doc """
+  Handle the success case:
+  1. Decode the body using json
+  2. Get out the access token
+  """
+  defp handle_token_response(conn, {:ok, response}) do
+    body = Poison.decode!(response.body)
+    access_token = Map.get(body, "access_token")
+    server_error = Map.get(body, "error")
 
-    access_token = Poison.decode!(response).access_token
+    if access_token != nil do
+      conn
+      |> json(%{token: access_token})
+    else
+      send_error(conn, server_error)
+    end
+  end
 
+  @doc """
+  Handle the error code for when the actual token request fails
+  """
+  defp handle_token_response(conn, {:err, error}) do
+    send_error(conn, error)
+  end
+
+  defp send_error(conn, error) do
     conn
-    |> json(%{token: access_token})
+    |> json(%{error: error})
   end
 
   @doc """
