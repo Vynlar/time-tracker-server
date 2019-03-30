@@ -9,5 +9,4 @@ config :time_tracker, TimeTrackerWeb.Endpoint,
 # Print only warnings and errors during test
 config :logger, level: :warn
 
-config :time_tracker, TimeTrackerWeb.SimpleInOutController,
-  base_path: "http://localhost:8080"
+config :time_tracker, :simple_in_out, base_path: "http://localhost:8080"

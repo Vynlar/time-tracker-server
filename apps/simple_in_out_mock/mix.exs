@@ -19,7 +19,7 @@ defmodule SIOMock.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      mod: {SIOMock.Application, [env: Mix.env]}
+      mod: {SIOMock.Application, [env: Mix.env()]}
     ]
   end
 

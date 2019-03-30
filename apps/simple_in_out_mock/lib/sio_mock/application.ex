@@ -11,13 +11,14 @@ defmodule SIOMock.Application do
   def start(_type, args) do
     plug_server = {Plug.Cowboy, scheme: :http, plug: SIOMock.Server, options: [port: @port]}
     # List all child processes to be supervised
-    children = case args do
-      [env: :test] -> [plug_server]
-      [env: :dev] -> []
-      _ -> []
-    end
+    children =
+      case args do
+        [env: :test] -> [plug_server]
+        [env: :dev] -> []
+        _ -> []
+      end
 
-    Logger.info "Starting Simple In/Out mock server on port #{@port}"
+    Logger.info("Starting Simple In/Out mock server on port #{@port}")
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
