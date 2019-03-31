@@ -8,7 +8,7 @@ use Mix.Config
 # with webpack to recompile .js and .css sources.
 config :time_tracker, TimeTrackerWeb.Endpoint,
   http: [port: 4000],
-  debug_errors: true,
+  debug_errors: false,
   code_reloader: true,
   check_origin: false,
   watchers: []
@@ -48,8 +48,7 @@ config :time_tracker, TimeTrackerWeb.Endpoint,
     ]
   ]
 
-config :time_tracker, :simple_in_out,
-  base_path: "http://www.simpleinout.com"
+config :time_tracker, :simple_in_out, base_path: "http://www.simpleinout.com"
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"

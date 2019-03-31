@@ -26,12 +26,21 @@ defmodule SIOMock.Server do
           json(conn, 400, %{"error" => "Invalid request format"})
         end
 
-        # success case
-        if code == "a_valid_code" do
-          json(conn, %{access_token: "a_valid_token"})
-        else
-          # invalid code case
-          json(conn, 404, %{"error" => "Invalid token"})
+        case code do
+          "a_valid_code" ->
+            json(conn, %{access_token: "a_valid_token"})
+
+          "an_invalid_code" ->
+            json(conn, 404, %{
+              "error" => "invalid_request",
+              "error_description" => "Invalid code"
+            })
+
+          "force_bad_response" ->
+            conn
+            |> put_resp_content_type("application/json")
+            |> send_resp(500, "this is not valid json")
+           "force_no_response" -> conn
         end
 
       _ ->

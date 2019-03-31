@@ -33,6 +33,6 @@ defmodule TimeTrackerWeb.Router do
     pipe_through(:authenticated)
     pipe_through(:api)
 
-    #get("/simpleinout/statuses", SimpleInOutController, :statuses)
+    # get("/simpleinout/statuses", SimpleInOutController, :statuses)
   end
 end
