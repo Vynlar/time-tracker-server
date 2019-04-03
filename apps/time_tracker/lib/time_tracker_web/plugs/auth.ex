@@ -11,10 +11,12 @@ defmodule TimeTrackerWeb.Plugs.Auth do
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    auth_header = get_req_header(conn, "Authorization")
+    auth_header = get_req_header(conn, "authorization")
 
     if auth_header == [] || auth_header == "" do
       raise(UnauthrorizedRequestError)
     end
+
+    conn
   end
 end

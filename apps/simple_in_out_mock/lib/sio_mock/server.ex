@@ -40,12 +40,29 @@ defmodule SIOMock.Server do
             conn
             |> put_resp_content_type("application/json")
             |> send_resp(500, "this is not valid json")
-           "force_no_response" -> conn
+
+          "force_no_response" ->
+            conn
         end
 
       _ ->
         # malformed request case
         json(conn, 400, %{"error" => "Invalid request format"})
+    end
+  end
+
+  get "/api/v4/statuses" do
+    auth_header = hd(get_req_header(conn, "authorization"))
+
+    if auth_header !== "Bearer a_valid_token" do
+      send_resp(conn, 401, "")
+    else
+      json(conn, %{
+        statuses: [
+          %{status: "in", comment: "IN", created_at: 1234},
+          %{status: "out", comment: "OUT", created_at: 4567}
+        ]
+      })
     end
   end
 

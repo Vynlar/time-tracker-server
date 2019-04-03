@@ -15,13 +15,11 @@ defmodule TimeTrackerWeb.TokenControllerTest do
     test "fetching a token returns an error for an invalid code", %{conn: conn} do
       error = catch_error(post(conn, @path, %{code: "an_invalid_code"}))
       assert error.code == "simple-in-out/upstream-error"
-      assert error.message == "Received error from Simple In/Out: Invalid code"
     end
 
     test "returns error for missing code", %{conn: conn} do
       error = catch_error(post(conn, @path, %{}))
-      assert error.code == "simple-in-out/code-required"
-      assert error.message == "request is missing code parameter"
+      assert error.code == "token/code-required"
     end
   end
 end
