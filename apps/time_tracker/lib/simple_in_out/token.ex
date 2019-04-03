@@ -19,19 +19,18 @@ defmodule SimpleInOut.Token do
     response = HTTPoison.post(url, body)
 
     case response do
-      {:ok, %{body: body}} ->
+      {:ok, %{body: body, status_code: 200}} ->
         case Poison.decode(body) do
           {:ok, %{"access_token" => token}} ->
             token
 
-          {:ok, %{"error_description" => error}} ->
-            raise SimpleInOut.Error.UpstreamError, error
-
-          {:error, error} ->
+          {:error, _, _} ->
             raise SimpleInOut.Error.ParseError
         end
+      {:ok, %{status_code: status_code, body: body}} ->
+        raise SimpleInOut.Error.UpstreamError, "Status: #{status_code}, body: #{body}"
 
-      {:err, err} ->
+      {:error, err} ->
         raise SimpleInOut.Error.ConnectionError
     end
   end

@@ -14,7 +14,7 @@ config :time_tracker, TimeTrackerWeb.Endpoint,
   url: [host: "example.com", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
-config :time_tracker, :simple_in_out, base_path: "http://www.simpleinout.com"
+config :time_tracker, :simple_in_out, base_path: "https://www.simpleinout.com"
 
 # Do not print debug messages in production
 config :logger, level: :info

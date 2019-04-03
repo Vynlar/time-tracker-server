@@ -30,8 +30,8 @@ defmodule TimeTrackerWeb.Router do
   end
 
   scope "/api", TimeTrackerWeb do
-    pipe_through(:authenticated)
     pipe_through(:api)
+    pipe_through(:authenticated)
 
     get("/simpleinout/statuses", StatusController, :index)
   end

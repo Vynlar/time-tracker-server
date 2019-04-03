@@ -5,7 +5,12 @@ defmodule TimeTrackerWeb.Plugs.Auth do
     @moduledoc """
     Error raised if a request does not have the Authorization header present
     """
-    defexception message: ""
+    defexception [:message, :code]
+
+    @impl true
+    def exception(_value) do
+      %__MODULE__{message: "Missing the Authorization header", code: "auth/missing-token"}
+    end
   end
 
   def init(opts), do: opts

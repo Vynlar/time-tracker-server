@@ -48,7 +48,7 @@ config :time_tracker, TimeTrackerWeb.Endpoint,
     ]
   ]
 
-config :time_tracker, :simple_in_out, base_path: "http://www.simpleinout.com"
+config :time_tracker, :simple_in_out, base_path: "https://www.simpleinout.com"
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"

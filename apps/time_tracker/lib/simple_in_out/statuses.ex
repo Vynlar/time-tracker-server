@@ -8,13 +8,15 @@ defmodule SimpleInOut.Statuses do
 
     response = HTTPoison.get(url, [{"authorization", token}], params: %{created_at: created_at})
 
+    IO.inspect response
+
     case response do
       {:ok, %{body: body, status_code: 200}} ->
         Poison.decode!(body)["statuses"]
         |> Enum.map(&format_status/1)
 
-      {:ok, %{status_code: 401}} ->
-        raise SimpleInOut.Error.UpstreamError, "Missing Authorization token"
+      {:ok, %{status_code: status_code, body: body}} ->
+        raise SimpleInOut.Error.UpstreamError, "Status: #{status_code}, body: #{body}"
 
       {:error, error} ->
         raise SimpleInOut.Error.ParseError
@@ -28,12 +30,12 @@ defmodule SimpleInOut.Statuses do
   def get_interval do
     start_time =
       DateTime.utc_now()
+      # 12 hours in seconds
+      |> DateTime.add(-12 * 60 * 60)
       |> DateTime.to_unix()
 
     end_time =
       DateTime.utc_now()
-      # 12 hours in seconds
-      |> DateTime.add(-12 * 60 * 60)
       |> DateTime.to_unix()
 
     "#{start_time}..#{end_time}"
